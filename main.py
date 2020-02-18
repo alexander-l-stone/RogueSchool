@@ -1,16 +1,7 @@
 import tdl
-
-class Main:
-    def run(self):
-        tdl.init(80, 50)
-
-        while not tdl.event.is_window_closed():
-            user_input = tdl.event.key_wait()
-            key_pressed = user_input.keychar
-            if key_pressed == "ESCAPE" or key_pressed == 'q':
-                break
-            else:
-                print("You pressed {}".format(key_pressed))
+from game.world import World
+from game.entities.drawable_entity import DrawableEntity
+from game.areas.area import Area
 
 class Game:
     def __init__(self, sw, sh, font_path):
@@ -43,6 +34,9 @@ class Game:
         tdl.set_font(self.FONT_PATH, greyscale=True, altLayout=True)
         self.console = tdl.Console(self.SCREEN_WIDTH, self.SCREEN_HEIGHT)
         self.main_window = tdl.init(self.SCREEN_WIDTH, self.SCREEN_HEIGHT, title="Rogue School", fullscreen=False)
+        self.world = World()
+        initial_area = Area(0,0, 100, 100, 'empty', '0,0 empty', (30,30,30))
+        self.world.areas[(0,0)] = initial_area
     
     def main_loop(self):
         while not tdl.event.is_window_closed():
@@ -50,6 +44,12 @@ class Game:
             for event in tdl.event.get():
                 pass
 
+
+class Main:
+    def run(self):
+        game = Game(80, 40, "arial12x12.png")
+        game.initialize()
+        game.main_loop()
 
 if __name__ == "__main__":
     Main().run()
